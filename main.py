@@ -8,8 +8,6 @@ attributes = {  "Archive name: " : "",
                 "Duration: " : "",
                 "Number of files: " : "", }
                 
-#archive_name, archive_fingerprint, time_start, duration, file_count
-
 for i in range(0, len(borg_output)):
     
     for key in attributes:
