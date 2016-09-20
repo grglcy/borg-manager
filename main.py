@@ -14,7 +14,7 @@ for i in range(0, len(borg_output)):
         if borg_output[i].startswith(key):
             attributes[key] = borg_output[i] \
             .strip(key) \
-            .strip("\n")
+            .rstrip()
 
 output = open("borg.txt", "w")
 
