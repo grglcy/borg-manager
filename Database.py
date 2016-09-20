@@ -1,6 +1,7 @@
 import sqlite3
 
-class db_connection(object):
+
+class Database(object):
     
     def __init__(self, path):
         self.conn = sqlite3.connect(path)
@@ -29,7 +30,7 @@ class db_connection(object):
     def table_exists(self, name):
         result = self.conn.execute("""SELECT * FROM sqlite_master
                     WHERE type='table' AND name=?""", (name,))
-        if result.fetchone() == None:
+        if result.fetchone() is None:
             return False
         else:
             return True
