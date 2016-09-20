@@ -1,6 +1,7 @@
 from sys import stdin
+from log_entry import *
 
-borg_output = stdin.readlines()
+raw_borg_output = stdin.readlines()
 
 attributes = {  "Archive name: " : "",
                 "Archive fingerprint: " : "",
@@ -8,17 +9,18 @@ attributes = {  "Archive name: " : "",
                 "Duration: " : "",
                 "Number of files: " : "", }
                 
-for i in range(0, len(borg_output)):
+for i in range(0, len(raw_borg_output)):
     
     for key in attributes:
-        if borg_output[i].startswith(key):
-            attributes[key] = borg_output[i] \
+        if raw_borg_output[i].startswith(key):
+            attributes[key] = raw_borg_output[i] \
             .strip(key) \
             .rstrip()
 
-output = open("borg.txt", "w")
+borg_output = log_entry(attributes["Archive name: "],
+                        attributes["Archive fingerprint: "],
+                        attributes["Time (start): "],
+                        attributes["Duration: "],
+                        attributes["Number of files: "])
 
-for key, value in attributes.iteritems():
-    output.write("%s%s\n" % (key, value))
-
-output.close()
+borg_output.print_to_file("borg.txt")
