@@ -27,3 +27,15 @@ class log_entry(object):
         converted_datetime = datetime(year, month, day, hour, minute, second)
         
         return converted_datetime
+    
+    def print_to_file(self, filename):
+        x = open(filename, "w")
+        
+        x.write("name: %s\n" % self.name)
+        x.write("fingerprint: %s\n" % self.fingerprint)
+        x.write("date: %s time: %s\n" % \
+            (self.datetime.date(), self.datetime.time()))
+        x.write("duration: %s\n" % self.duration)
+        x.write("file_count: %s\n" % self.file_count)
+        
+        x.close()
