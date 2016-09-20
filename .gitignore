@@ -10,6 +10,9 @@ __pycache__/
 *.txt
 *.db
 
+# pycharm
+.idea/
+
 # Distribution / packaging
 .Python
 env/
