@@ -8,7 +8,7 @@ class LogEntry(object):
                  file_count):
         self.name = name
         self.fingerprint = fingerprint
-        self.datetime = self.set_datetime(datetime_string)
+        self.datetime = get_datetime(datetime_string)
         self.duration = duration
         self.file_count = file_count
     
@@ -24,8 +24,13 @@ class LogEntry(object):
         
         x.close()
 
+    def datetime_string(self):
+        x = self.datetime
+        return "%s-%s-%s %s:%s:%s" % (x.year(), x.month(), x.day(),
+                                      x.hour(), x.minute(), x.second())
 
-def set_datetime(datetime_string):
+
+def get_datetime(datetime_string):
     date_string = re.search(r"....-..-..", datetime_string).group()
     time_string = re.search(r"..:..:..", datetime_string).group()
 
