@@ -34,3 +34,14 @@ class Database(object):
             return False
         else:
             return True
+
+    def insert(self, log_entry, table):
+            result = self.conn.execute("""INSERT INTO %s(NAME,
+            FINGERPRINT, START_TIME, DURATION, FILE_COUNT) VALUES(?,?,?,?,?)"""
+                                       % table,
+                                       (log_entry.name,
+                                        log_entry.fingerprint,
+                                        log_entry.datetime_string(),
+                                        "1",
+                                        log_entry.file_count))
+            self.conn.commit()
