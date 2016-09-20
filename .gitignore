@@ -8,6 +8,7 @@ __pycache__/
 
 # Generic file extensions
 *.txt
+*.db
 
 # Distribution / packaging
 .Python
