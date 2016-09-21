@@ -42,6 +42,6 @@ class Database(object):
                                        (log_entry.name,
                                         log_entry.fingerprint,
                                         log_entry.datetime_string(),
-                                        "1",
+                                        log_entry.duration,
                                         log_entry.file_count))
             self.conn.commit()
