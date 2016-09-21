@@ -31,7 +31,7 @@ database = Database("borg.db")
 row_list = ["ID INTEGER PRIMARY KEY",
             "NAME TEXT NOT NULL",
             "FINGERPRINT TEXT NOT NULL",
-            "START_TIME DATETIME NOT NULL",
+            "START_TIME TEXT NOT NULL",
             "DURATION REAL NOT NULL",
             "FILE_COUNT INTEGER NOT NULL"]
 
