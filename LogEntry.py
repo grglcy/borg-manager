@@ -26,7 +26,7 @@ class LogEntry(object):
 
     def datetime_string(self):
         x = self.datetime
-        return "%s-%s-%s %s:%s:%s" % (x.year, x.month, x.day,
+        return "%04d-%02d-%02d %02d:%02d:%02d" % (x.year, x.month, x.day,
                                       x.hour, x.minute, x.second)
 
 
