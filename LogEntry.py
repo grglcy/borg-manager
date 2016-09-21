@@ -4,12 +4,12 @@ import re
 
 class LogEntry(object):
 
-    def __init__(self, name, fingerprint, datetime_string, duration,
+    def __init__(self, name, fingerprint, datetime_string, duration_string,
                  file_count):
         self.name = name
         self.fingerprint = fingerprint
         self.datetime = get_datetime(datetime_string)
-        self.duration = duration
+        self.duration = get_duration(duration_string)
         self.file_count = file_count
     
     def print_to_file(self, filename):
@@ -28,6 +28,32 @@ class LogEntry(object):
         x = self.datetime
         return "%s-%s-%s %s:%s:%s" % (x.year, x.month, x.day,
                                       x.hour, x.minute, x.second)
+
+
+def get_duration(duration_string):
+    total_seconds = 0.0
+
+    seconds = re.search(r"((\d+)\.(\d+)|(\d+))\s(second|seconds)",
+                        duration_string)
+    minutes = re.search(r"((\d+)\.(\d+)|(\d+))\s(minute|minutes)",
+                        duration_string)
+    hours = re.search(r"((\d+)\.(\d+)|(\d+))\s(hour|hours)",
+                      duration_string)
+
+    if seconds is not None:
+        seconds = seconds.group().strip(" seconds")
+        seconds = float(seconds)
+        total_seconds += seconds
+    if minutes is not None:
+        minutes = minutes.group().strip(" minutes")
+        minutes = float(minutes)
+        total_seconds += minutes * 60
+    if hours is not None:
+        hours = hours.group().strip(" hours")
+        hours = float(hours)
+        total_seconds += hours * 3600
+
+    return total_seconds
 
 
 def get_datetime(datetime_string):
