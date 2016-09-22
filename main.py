@@ -4,6 +4,7 @@ from Database import *
 
 raw_borg_output = stdin.readlines()
 
+# attribute names of log based on borg output
 attributes = {"Archive name: ": "",
               "Archive fingerprint: ": "",
               "Time (start): ": "",
@@ -11,7 +12,8 @@ attributes = {"Archive name: ": "",
               "Number of files: ": ""}
                 
 for i in range(0, len(raw_borg_output)):
-    
+
+    # Look for lines matching attribute names
     for key in attributes:
         if raw_borg_output[i].startswith(key):
             attributes[key] = raw_borg_output[i] \
