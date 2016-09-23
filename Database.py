@@ -52,3 +52,7 @@ class Database(object):
 
     def query(self, query):
         return self.conn.execute(query).fetchall()
+
+    def query_year(self, table, year):
+        return self.query("""SELECT * FROM %s WHERE strftime(\"%%Y\",
+                          START_TIME) == \"%s\"""" % (table, year))
