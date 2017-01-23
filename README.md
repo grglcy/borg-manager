@@ -5,4 +5,4 @@ My vision is to have a graphical user interface that displays a graph with data 
 
 I intend to use it to keep track of backup duration and filesize to ensure that backups aren't taking an excessive amount of time to complete or too much storage.
 
-I'm learning Python (and git) with this project so it's going to get a bit messy!
+I'm learning Python (and git) with this project so it might get a bit confusing at times!
