@@ -4,11 +4,12 @@ import re
 
 class LogEntry(object):
 
-    def __init__(self, name, fingerprint, start_time, duration_string,
+    def __init__(self, name, fingerprint, start_time, end_time, duration_string,
                  file_count):
         self.name = name
         self.fingerprint = fingerprint
         self.start_time = self.get_datetime(start_time)
+        self.end_time = self.get_datetime(end_time)
         self.duration = self.get_duration(duration_string)
         self.file_count = file_count
     
@@ -17,13 +18,14 @@ class LogEntry(object):
             file.writelines([f"name: {self.name}",
                              f"fingerprint: {self.fingerprint}",
                              f"start: {self.start_time.date()} time: {self.start_time.time()}",
+                             f"end: {self.end_time.date()} time: {self.end_time.time()}",
                              f"duration: {self.duration}",
                              f"file_count: {self.file_count}"])
 
-    def datetime_string(self):
-        s = self.start_time
-        return "%04d-%02d-%02d %02d:%02d:%02d" % (s.year, s.month, s.day,
-                                                  s.hour, s.minute, s.second)
+    # def datetime_string(self):
+    #     s = self.start_time
+    #     return "%04d-%02d-%02d %02d:%02d:%02d" % (s.year, s.month, s.day,
+    #                                               s.hour, s.minute, s.second)
 
     @staticmethod
     def get_duration(duration_string):
