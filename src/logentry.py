@@ -22,36 +22,22 @@ class LogEntry(object):
                              f"duration: {self.duration}",
                              f"file_count: {self.file_count}"])
 
-    # def datetime_string(self):
-    #     s = self.start_time
-    #     return "%04d-%02d-%02d %02d:%02d:%02d" % (s.year, s.month, s.day,
-    #                                               s.hour, s.minute, s.second)
-
-    @staticmethod
-    def get_duration(duration_string):
+    def get_duration(self, duration_string):
         total_seconds = 0.0
-
-        seconds = re.search(r"((\d+)\.(\d+)|(\d+))\s(second|seconds)",
-                            duration_string)
-        minutes = re.search(r"((\d+)\.(\d+)|(\d+))\s(minute|minutes)",
-                            duration_string)
-        hours = re.search(r"((\d+)\.(\d+)|(\d+))\s(hour|hours)",
-                          duration_string)
-
-        if seconds is not None:
-            seconds = seconds.group().strip(" seconds")
-            seconds = float(seconds)
-            total_seconds += seconds
-        if minutes is not None:
-            minutes = minutes.group().strip(" minutes")
-            minutes = float(minutes)
-            total_seconds += minutes * 60
-        if hours is not None:
-            hours = hours.group().strip(" hours")
-            hours = float(hours)
-            total_seconds += hours * 3600
+        time_strings = [('second', 1), ('minute', 60), ('hour', 3600), ('day', 86400)]
+        for ts, mult in time_strings:
+            total_seconds += self.get_time_unit_string(duration_string, ts, mult)
 
         return total_seconds
+
+    @staticmethod
+    def get_time_unit_string(text: str, time_text: str, multiplier: int = 1):
+        substring = re.search(rf"((\d+)\.(\d+)|(\d+))\s({time_text}|{time_text}s)", text)
+        if substring is not None:
+            substring = substring.group().strip(f" {time_text}s")
+            return float(substring) * multiplier
+        else:
+            return 0
 
     @staticmethod
     def get_datetime(datetime_string):
