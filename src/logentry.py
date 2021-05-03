@@ -1,4 +1,5 @@
-from datetime import *
+from datetime import datetime
+from math import floor
 import re
 
 
@@ -23,12 +24,12 @@ class LogEntry(object):
                              f"file_count: {self.file_count}"])
 
     def get_duration(self, duration_string):
-        total_seconds = 0.0
+        total_seconds = 0
         time_strings = [('second', 1), ('minute', 60), ('hour', 3600), ('day', 86400)]
         for ts, mult in time_strings:
             total_seconds += self.get_time_unit_string(duration_string, ts, mult)
 
-        return total_seconds
+        return floor(total_seconds)
 
     @staticmethod
     def get_time_unit_string(text: str, time_text: str, multiplier: int = 1):
