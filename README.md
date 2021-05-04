@@ -7,8 +7,8 @@ Summarises [borg](https://borgbackup.readthedocs.io/en/stable/#what-is-borgbacku
 
 ### Planned:
 * Summary CLI interface
-* Output to HTML
+* Output to Graphs/HTML
 
 ## How to use
-Pipe the output of 'borg create --json' to the script, e.g.
+Pipe the output of 'borg create --json' to the script, for example:
 > borg create --json /repo/path::name /important/data/ | python3 ./main.py
