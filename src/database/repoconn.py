@@ -5,7 +5,7 @@ class RepoConn(DatabaseConnection):
     def __init__(self, db_path, table_name: str = 'repo'):
         super(RepoConn, self).__init__(db_path, table_name)
 
-    def _insert(self, record) -> int:
+    def _insert(self, record, repo_id=None, archive_id=None) -> int:
         with self.sql_lock:
             cursor = self.sql_cursor
             statement = f"INSERT INTO {self._sql_table}"\

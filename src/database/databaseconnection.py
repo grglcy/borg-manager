@@ -66,19 +66,19 @@ class DatabaseConnection(ABC):
     def sql_commit(self):
         self.__sql_database.commit()
 
-    def insert(self, record, *args, **kwargs):
+    def insert(self, record, repo_id=None, archive_id=None):
         exists, primary_key = self.exists(record)
         if exists:
             self._update(record, primary_key)
             return primary_key
         else:
-            return self._insert(record, *args, **kwargs)
+            return self._insert(record, repo_id, archive_id)
 
     def _update(self, record, primary_key):
         pass
 
     @abstractmethod
-    def _insert(self, record, *args, **kwargs) -> int:
+    def _insert(self, record, repo_id=None, archive_id=None) -> int:
         raise NotImplementedError
 
     def exists(self, record) -> (bool, int):

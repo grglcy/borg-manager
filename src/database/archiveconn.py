@@ -19,7 +19,9 @@ class ArchiveConn(DatabaseConnection):
     def _exists(self, record):
         return f"SELECT archive_id FROM {self._sql_table} WHERE fingerprint=?;", (record.fingerprint,)
 
-    def _insert(self, record, repo_id) -> int:
+    def _insert(self, record, repo_id=None, archive_id=None) -> int:
+        if repo_id is None:
+            raise Exception("Repo id not supplied")
         with self.sql_lock:
             cursor = self.sql_cursor
             statement = f"INSERT INTO {self._sql_table}"\
