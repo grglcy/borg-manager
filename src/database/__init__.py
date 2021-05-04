@@ -1,4 +1,4 @@
 from .databaseconnection import DatabaseConnection
-from .repo import Repo
-from .archive import Archive
-from .stats import Stats
+from .repoconn import RepoConn
+from .archiveconn import ArchiveConn
+from .statsconn import StatsConn

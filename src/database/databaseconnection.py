@@ -16,8 +16,6 @@ class DatabaseConnection(ABC):
         self._create_table()
         self.sql_commit()
 
-        self.primary_key = None
-
     @property
     def sql_lock(self):
         return self.__sql_lock
@@ -68,26 +66,35 @@ class DatabaseConnection(ABC):
     def sql_commit(self):
         self.__sql_database.commit()
 
-    def insert(self):
-        if self.exists():
-            raise Exception("Record exists")
-        elif self.primary_key is not None:
-            raise Exception("Primary key already set")
+    def insert(self, record, *args, **kwargs):
+        exists, primary_key = self.exists(record)
+        if exists:
+            self._update(record, primary_key)
+            return primary_key
         else:
-            self.primary_key = self._insert()
+            return self._insert(record, *args, **kwargs)
+
+    def _update(self, record, primary_key):
+        pass
 
     @abstractmethod
-    def _insert(self) -> int:
+    def _insert(self, record, *args, **kwargs) -> int:
         raise NotImplementedError
 
-    def exists(self) -> bool:
-        exists, primary_key = self._exists()
-        if exists:
-            self.primary_key = primary_key
-        return exists
+    def exists(self, record) -> (bool, int):
+        query, args = self._exists(record)
+
+        if query is None:
+            return False, None
+        else:
+            result = self.sql_execute_one(query, args)
+            if result is None:
+                return False, None
+            else:
+                return True, result[0]
 
     @abstractmethod
-    def _exists(self) -> (bool, list):
+    def _exists(self, record) -> (str, tuple):
         raise NotImplementedError
 
     @abstractmethod
