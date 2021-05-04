@@ -7,7 +7,16 @@ class Repo(object):
         self.fingerprint = fingerprint
         self.location = location
         self.last_modified = last_modified
-        self.primary_key = primary_key
+        self.__primary_key = primary_key
+
+    @property
+    def primary_key(self):
+        if self.__primary_key is None:
+            raise ValueError("Primary key is None")
+        else:
+            return self.__primary_key
+
+    # region CLASS METHODS
 
     @classmethod
     def from_json(cls, json: dict):
@@ -19,3 +28,12 @@ class Repo(object):
     @classmethod
     def from_sql(cls, sql: tuple):
         return cls(sql[1], sql[2], sql[3], sql[0])
+
+    # endregion
+
+    # region GET
+
+    def seconds_since(self) -> float:
+        return (datetime.now() - self.last_modified).total_seconds()
+
+    # endregion
