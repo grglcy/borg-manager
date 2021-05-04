@@ -17,6 +17,8 @@ class BorgDatabase(object):
         self.error_conn = ErrorConn(db_path,
                                     table_name=self.error_name)
 
+    # region INSERT
+
     def insert_record(self, repo, archive, stats):
         repo_id = self.repo_conn.insert(repo)
         archive_id = self.archive_conn.insert(archive, repo_id)
@@ -24,3 +26,12 @@ class BorgDatabase(object):
 
     def insert_error(self, borg_error):
         self.error_conn.insert(borg_error)
+
+    # endregion
+
+    # region GET
+
+    def get_repos(self):
+        return self.repo_conn.get_all()
+
+    # endregion

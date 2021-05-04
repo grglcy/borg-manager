@@ -16,6 +16,16 @@ class DatabaseConnection(ABC):
         self._create_table()
         self.sql_commit()
 
+    # region INIT
+
+    @abstractmethod
+    def _create_table(self):
+        raise NotImplementedError
+
+    # endregion
+
+    # region PROPERTIES
+
     @property
     def sql_lock(self):
         return self.__sql_lock
@@ -23,6 +33,13 @@ class DatabaseConnection(ABC):
     @property
     def sql_cursor(self):
         return self.__sql_database.cursor()
+
+    # endregion
+
+    # region GENERIC SQL
+
+    def sql_commit(self):
+        self.__sql_database.commit()
 
     def sql_execute(self, statement: str, args: tuple = None):
         with self.__sql_lock:
@@ -63,8 +80,9 @@ class DatabaseConnection(ABC):
 
             return cursor.fetchone()
 
-    def sql_commit(self):
-        self.__sql_database.commit()
+    # endregion
+
+    # region MODIFICATION
 
     def insert(self, record, repo_id=None, archive_id=None):
         exists, primary_key = self.exists(record)
@@ -97,9 +115,18 @@ class DatabaseConnection(ABC):
     def _exists(self, record) -> (str, tuple):
         raise NotImplementedError
 
-    @abstractmethod
-    def _create_table(self):
-        raise NotImplementedError
+    # endregion
+
+    # region QUERIES
+
+    def get_all(self):
+        result = self.sql_execute_one(f"SELECT * FROM {self._sql_table};")
+        if result is None:
+            return None
+        else:
+            return result[0]
+
+    # endregion
 
     def stop(self):
         with self.__sql_lock:
