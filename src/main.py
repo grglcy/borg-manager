@@ -1,7 +1,7 @@
 from sys import stdin
 from os.path import realpath
 from pathlib import Path
-from database import Repo, Archive
+from database import Repo, Archive, Stats
 import json
 
 
@@ -9,7 +9,8 @@ def main(input_json: dict, path: Path):
     db_path = path / 'borg.sqlite'
 
     repo = Repo(db_path, input_json['repository'])
-    log_entry = Archive(db_path, repo, input_json['archive'])
+    archive = Archive(db_path, repo, input_json['archive'])
+    stats = Stats(db_path, repo, archive, input_json['archive']['stats'])
 
 
 if __name__ == "__main__":

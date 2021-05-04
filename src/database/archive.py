@@ -9,7 +9,6 @@ class Archive(DatabaseConnection):
         self.uuid = archive_json['id']
         self.repo_id = repo.repo_id
         self.name = archive_json['name']
-        print(archive_json['start'])
         self.start = datetime.fromisoformat(archive_json['start'])
         self.end = datetime.fromisoformat(archive_json['end'])
 
