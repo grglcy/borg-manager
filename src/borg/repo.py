@@ -3,10 +3,11 @@ from pathlib import Path
 
 
 class Repo(object):
-    def __init__(self, fingerprint: str, location: Path, last_modified: datetime):
+    def __init__(self, fingerprint: str, location: Path, last_modified: datetime, primary_key=None):
         self.fingerprint = fingerprint
         self.location = location
         self.last_modified = last_modified
+        self.primary_key = primary_key
 
     @classmethod
     def from_json(cls, json: dict):
