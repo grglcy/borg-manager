@@ -17,8 +17,6 @@ class ErrorConn(DatabaseConnection):
         return None, None
 
     def _insert(self, record, repo_id=None, archive_id=None) -> int:
-        if repo_id is None or archive_id is None:
-            raise Exception("Repo and archive ids not supplied")
         with self.sql_lock:
             cursor = self.sql_cursor
             statement = f"INSERT INTO {self._sql_table}"\

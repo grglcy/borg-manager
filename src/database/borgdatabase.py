@@ -1,4 +1,5 @@
 from .connection import RepoConn, ArchiveConn, StatsConn, ErrorConn
+from datetime import datetime
 from pathlib import Path
 from src import borg
 import json
@@ -25,6 +26,7 @@ class BorgDatabase(object):
             borg_json = json.loads(borg_output)
         except json.JSONDecodeError:
             self.handle_borg_error(borg_output)
+            return
         self.process_borg_json(borg_json)
 
     def process_borg_json(self, borg_json: dict):
@@ -37,4 +39,5 @@ class BorgDatabase(object):
         self.stats_conn.insert(stats, repo_id, archive_id)
 
     def handle_borg_error(self, borg_error: str):
-        pass
+        error = borg.Error(borg_error, datetime.now())
+        self.error_conn.insert(error)
