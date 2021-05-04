@@ -34,4 +34,7 @@ class BorgDatabase(object):
     def get_repos(self):
         return self.repo_conn.get_all()
 
+    def get_repo_stats(self, repo):
+        return self.stats_conn.get_latest_stats(repo)
+
     # endregion

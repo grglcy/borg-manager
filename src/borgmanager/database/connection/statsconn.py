@@ -9,6 +9,8 @@ class StatsConn(DatabaseConnection):
 
         super().__init__(db_path, table_name)
 
+    # region INIT
+
     def _create_table(self):
         create_statement = f"create table if not exists {self._sql_table}(" \
                            f"stat_id INTEGER PRIMARY KEY," \
@@ -23,6 +25,10 @@ class StatsConn(DatabaseConnection):
                            f"FOREIGN KEY (archive_id) REFERENCES" \
                            f" {self.archive_table} (archive_id));"
         self.sql_execute(create_statement)
+
+    # endregion
+
+    # region INSERT
 
     def _exists(self, record):
         return None, None
@@ -41,3 +47,13 @@ class StatsConn(DatabaseConnection):
             cursor.execute(statement, args)
             self.sql_commit()
             return cursor.lastrowid
+
+    # endregion
+
+    # region QUERY
+
+    def get_latest_stats(self, repo):
+        key = repo.primary_key
+        return self.sql_execute_one(f"SELECT * FROM {self._sql_table} WHERE repo_id=?;", (key,))
+
+    # endregion
