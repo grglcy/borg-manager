@@ -8,7 +8,13 @@ from borgmanager.summary import Summary
 
 
 def main(args, path: Path):
+    if args.output is not None:
+        output_path = Path(args.output)
+        if not output_path.exists():
+            output_path.mkdir()
+        path = output_path
     db = BorgDatabase(path / 'borg.sqlite')
+
     if args.graph is not None:
         pass
     elif args.summary is not None:
@@ -27,6 +33,7 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-g", "--graph", help="Produce graphs at specified location", type=str)
     parser.add_argument("-s", "--summary", help="Print summary", type=str)
+    parser.add_argument("-o", "--output", help="Output Directory", type=str)
     return parser.parse_args()
 
 
