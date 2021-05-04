@@ -1,39 +1,26 @@
 from sys import stdin
-from src.logentry import LogEntry
-from src.database import Database
+from os.path import realpath
+from pathlib import Path
+from database import Repo, Archive
+import json
 
 
-def main(input_lines: list):
-    raw_borg_output = input_lines
+def main(input_json: dict, path: Path):
+    db_path = path / 'borg.sqlite'
 
-    borg_log_entry = create_log_entry(raw_borg_output)
-    borg_log_entry.print_to_file("borg.txt")
-
-    database = Database("borg.db")
-    database.insert(borg_log_entry)
-
-
-def create_log_entry(raw_borg_output: list):
-    attributes = {"Archive name: ": "",
-                  "Archive fingerprint: ": "",
-                  "Time (start): ": "",
-                  "Time (end): ": "",
-                  "Duration: ": "",
-                  "Number of files: ": ""}
-
-    for line in raw_borg_output:
-        for key in attributes:
-            if line.startswith(key):
-                attributes[key] = line[len(key):].strip()
-
-    return LogEntry(attributes["Archive name: "],
-                    attributes["Archive fingerprint: "],
-                    attributes["Time (start): "],
-                    attributes["Time (end): "],
-                    attributes["Duration: "],
-                    attributes["Number of files: "])
+    repo = Repo(db_path, input_json['repository'])
+    log_entry = Archive(db_path, repo, input_json['archive'])
 
 
 if __name__ == "__main__":
+    path = Path(realpath(__file__)).parent.parent
     input_text = stdin.readlines()
-    main(input_text)
+
+    try:
+        input_json = json.loads(" ".join(input_text))
+    except:
+        # todo: output input_text somewhere
+        print("Error parsing json, output:")
+        print("\n".join(input_text))
+        exit(1)
+    main(input_json, path)
