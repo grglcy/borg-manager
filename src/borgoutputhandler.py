@@ -1,5 +1,5 @@
 from datetime import datetime
-import borg
+from borgmanager import borg
 import json
 
 

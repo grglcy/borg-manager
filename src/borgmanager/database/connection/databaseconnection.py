@@ -120,11 +120,7 @@ class DatabaseConnection(ABC):
     # region QUERIES
 
     def get_all(self):
-        result = self.sql_execute_one(f"SELECT * FROM {self._sql_table};")
-        if result is None:
-            return None
-        else:
-            return result[0]
+        return self.sql_execute_all(f"SELECT * FROM {self._sql_table};")
 
     # endregion
 

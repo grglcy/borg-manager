@@ -17,5 +17,5 @@ class Repo(object):
         return cls(uuid, location, last_modified)
 
     @classmethod
-    def from_sql(cls, sql: list):
-        pass
+    def from_sql(cls, sql: tuple):
+        return cls(sql[1], sql[2], sql[3], sql[0])
