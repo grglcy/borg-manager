@@ -1,4 +1,4 @@
-from . import DatabaseConnection
+from .databaseconnection import DatabaseConnection
 
 
 class RepoConn(DatabaseConnection):
@@ -27,7 +27,7 @@ class RepoConn(DatabaseConnection):
     def _create_table(self):
         create_statement = f"create table if not exists {self._sql_table}(" \
                            f"repo_id INTEGER PRIMARY KEY," \
-                           f"fingerprint INTEGER NOT NULL UNIQUE," \
+                           f"fingerprint TEXT NOT NULL UNIQUE," \
                            f"location TEXT NOT NULL," \
                            f"last_modified TIMESTAMP NOT NULL)"
         self.sql_execute(create_statement)

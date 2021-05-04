@@ -1,8 +1,12 @@
-from . import DatabaseConnection
+from .databaseconnection import DatabaseConnection
 
 
 class StatsConn(DatabaseConnection):
-    def __init__(self, db_path, table_name: str = "stats"):
+    def __init__(self, db_path, repo_table: str, archive_table: str,
+                 table_name: str = "stats"):
+        self.repo_table = repo_table
+        self.archive_table = archive_table
+
         super().__init__(db_path, table_name)
 
     def _create_table(self):
@@ -14,8 +18,10 @@ class StatsConn(DatabaseConnection):
                            f"original_size INTEGER NOT NULL," \
                            f"compressed_size INTEGER NOT NULL," \
                            f"deduplicated_size INTEGER NOT NULL," \
-                           f"FOREIGN KEY (repo_id) REFERENCES repo (repo_id)," \
-                           f"FOREIGN KEY (archive_id) REFERENCES archive (archive_id))"
+                           f"FOREIGN KEY (repo_id) REFERENCES" \
+                           f" {self.repo_table} (repo_id)," \
+                           f"FOREIGN KEY (archive_id) REFERENCES" \
+                           f" {self.archive_table} (archive_id));"
         self.sql_execute(create_statement)
 
     def _exists(self, record):
