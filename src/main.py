@@ -3,7 +3,7 @@ from sys import stdin
 from os.path import realpath
 from pathlib import Path
 import argparse
-from borgoutputhandler import BorgOutputHandler
+from borgmanager.borg import OutputHandler
 from borgmanager.summary import Summary
 
 
@@ -15,7 +15,7 @@ def main(args, path: Path):
         summary = Summary(db, args.summary)
     else:
         borg_output = " ".join(stdin.readlines())
-        bo = BorgOutputHandler(borg_output)
+        bo = OutputHandler(borg_output)
 
         if bo.error:
             db.insert_error(bo.get_borg_error())

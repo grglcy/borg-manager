@@ -3,7 +3,7 @@ from borgmanager import borg
 import json
 
 
-class BorgOutputHandler(object):
+class OutputHandler(object):
     def __init__(self, borg_output: str):
         self.borg_output = borg_output
         self.borg_json = None
