@@ -5,15 +5,14 @@ class Stats(DatabaseConnection):
     def __init__(self, db_path, repo: Repo, archive: Archive, stats_json: dict, table_name: str = "stats"):
         super().__init__(db_path, table_name)
 
-        self.stat_id = None
-        self.repo_id = repo.repo_id
-        self.archive_id = archive.archive_id
+        self.repo_id = repo.primary_key
+        self.archive_id = archive.primary_key
         self.file_count = stats_json['nfiles']
         self.original_size = stats_json['original_size']
         self.compressed_size = stats_json['compressed_size']
         self.deduplicated_size = stats_json['deduplicated_size']
 
-        self.stat_id = self._insert()
+        self.insert()
 
     def _create_table(self):
         create_statement = f"create table if not exists {self._sql_table}(" \
@@ -29,7 +28,7 @@ class Stats(DatabaseConnection):
         self.sql_execute(create_statement)
 
     def _exists(self):
-        return False
+        return False, None
 
     def _insert(self) -> int:
         with self.sql_lock:

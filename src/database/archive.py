@@ -7,12 +7,12 @@ class Archive(DatabaseConnection):
         super().__init__(db_path, table_name)
 
         self.uuid = archive_json['id']
-        self.repo_id = repo.repo_id
+        self.repo_id = repo.primary_key
         self.name = archive_json['name']
         self.start = datetime.fromisoformat(archive_json['start'])
         self.end = datetime.fromisoformat(archive_json['end'])
 
-        self.archive_id = self._insert()
+        self.insert()
 
     def _create_table(self):
         create_statement = f"create table if not exists {self._sql_table}(" \
@@ -29,13 +29,11 @@ class Archive(DatabaseConnection):
         result = self.sql_execute_one(f"SELECT archive_id FROM {self._sql_table}"
                                       f" WHERE uuid=?;", (self.uuid,))
         if result is None:
-            return None
+            return False, None
         else:
-            return result[0]
+            return True, result[0]
 
     def _insert(self) -> int:
-        if self._exists():
-            raise Exception("archive with same uuid already exists")
         with self.sql_lock:
             cursor = self.sql_cursor
             statement = f"INSERT INTO {self._sql_table}"\
