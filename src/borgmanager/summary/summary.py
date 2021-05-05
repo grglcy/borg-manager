@@ -21,7 +21,8 @@ class Summary(object):
                 return_string += f"Repo: {repo_name}\n"
             return_string += f"Location: {repo.location}\n"
             return_string += f"Last backup: {self.seconds_to_string(repo.seconds_since(), 'day', True)} ago\n"
-            return_string += f"Size: {self.bytes_to_string(cache.unique_csize)}\n"
+            return_string += f"Un/Compressed Size: {self.bytes_to_string(cache.unique_size)}" \
+                             f"/{self.bytes_to_string(cache.unique_csize)}\n"
             return_string += "\n"
         return return_string.strip()
 
@@ -63,10 +64,10 @@ class Summary(object):
 
     @staticmethod
     def bytes_to_string(bytes: int):
-        suffixes = ("B", "KB", "MB", "GB", "TB", "PB")
+        suffixes = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB", "HB")
         if bytes == 0:
             return f"0{suffixes[0]}"
         else:
             index = int(floor(log(bytes, 1024)))
             s = round(bytes / pow(1024, index), 2)
-            return "%s %s" % (s, suffixes[index])
+            return f"{s}{suffixes[index]}"
