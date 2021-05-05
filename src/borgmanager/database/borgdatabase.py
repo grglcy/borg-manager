@@ -47,6 +47,9 @@ class BorgDatabase(object):
     def get_repos(self):
         return self.repo_conn.get_all()
 
+    def get_repo_name(self, repo):
+        return self.label_conn.get_repo_name(repo.primary_key)
+
     def get_cache(self, repo):
         archive = Archive.from_sql(self.get_latest_archive(repo))
         return self.cache_conn.get(archive.primary_key)

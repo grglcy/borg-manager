@@ -56,3 +56,15 @@ class LabelConn(DatabaseConnection):
         self.sql_commit()
 
     # endregion
+
+    # region QUERIES
+
+    def get_repo_name(self, repo_id):
+        result = self.sql_execute_one(f"SELECT label FROM {self._sql_table} WHERE repo_id = ?",
+                                      (repo_id,))
+        if result is None:
+            return None
+        else:
+            return result[0]
+
+    # endregion
