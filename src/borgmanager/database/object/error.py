@@ -16,4 +16,7 @@ class Error(DBObject):
 
     @classmethod
     def from_sql(cls, sql: list):
-        pass
+        primary_key = sql[0]
+        error = sql[2]
+        time = sql[3]
+        return cls(error, time, primary_key)
