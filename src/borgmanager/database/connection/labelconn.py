@@ -68,4 +68,12 @@ class LabelConn(DatabaseConnection):
         else:
             return result[0]
 
+    def get_label_id(self, repo_id):
+        result = self.sql_execute_one(f"SELECT id FROM {self._sql_table} WHERE repo_id = ?",
+                                      (repo_id,))
+        if result is None:
+            return None
+        else:
+            return result[0]
+
     # endregion
