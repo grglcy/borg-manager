@@ -1,13 +1,14 @@
+from . import DBObject
 from datetime import datetime
 
 
-class Archive(object):
+class Archive(DBObject):
     def __init__(self, fingerprint: str, name: str, start: datetime, end: datetime, primary_key=None):
+        super(Archive, self).__init__(primary_key)
         self.fingerprint = fingerprint
         self.name = name
         self.start = start
         self.end = end
-        self.primary_key = primary_key
 
     @classmethod
     def from_json(cls, json: dict):
