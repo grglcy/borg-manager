@@ -1,4 +1,6 @@
 from .databaseconnection import DatabaseConnection
+from datetime import datetime
+from borgmanager.database.object import Archive
 
 
 class ArchiveConn(DatabaseConnection):
@@ -57,4 +59,31 @@ class ArchiveConn(DatabaseConnection):
         return self.sql_execute_one(f"SELECT * FROM {self._sql_table} WHERE repo_id = ?"
                                     f" ORDER BY id DESC LIMIT 1;", (repo_id,))
 
+    def archive_on_hour(self, repo_id, date: datetime):
+        date_string = str(date.date())
+        hour_string = str(date.hour).zfill(2)
+        result = self.sql_execute_all(f"SELECT * FROM {self._sql_table}"
+                                      f" WHERE DATE(start) = DATE(?)"
+                                      f" AND strftime('%H', start) = ?"
+                                      f" AND repo_id = ?;",
+                                      (date_string, hour_string, repo_id))
+        return len(result) > 0
+
+    def archive_on_date(self, repo_id, date: datetime):
+        date_string = str(date.date())
+        result = self.sql_execute_all(f"SELECT * FROM {self._sql_table}"
+                                      f" WHERE DATE(start) = DATE(?)"
+                                      f" AND repo_id = ?;",
+                                      (date_string, repo_id))
+        return len(result) > 0
+
+    def between_dates(self, repo_id, first: datetime, last: datetime):
+        first_string = str(first.date())
+        last_string = str(last.date())
+        result = self.sql_execute_all(f"SELECT * FROM {self._sql_table}"
+                                      f" WHERE DATE(start) >= DATE(?)"
+                                      f" AND DATE(start) <= DATE(?)"
+                                      f" AND repo_id = ?",
+                                      (first_string, last_string, repo_id))
+        return len(result) > 0
     # endregion
