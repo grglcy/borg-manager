@@ -1,4 +1,5 @@
-from borgmanager.database.object import Repo
+from borgmanager.database.object import Repo, Cache
+from math import floor, pow, log
 
 
 class Summary(object):
@@ -14,9 +15,10 @@ class Summary(object):
         return_string = ""
         for line in repo_sql:
             repo = Repo.from_sql(line)
+            cache = Cache.from_sql(self.db.get_cache(repo))
             return_string += f"repo: {repo.location}\n"
             return_string += f"last backup: {self.seconds_to_string(repo.seconds_since(), 'day', True)} ago\n"
-            return_string += f"file count: {repo.file_count}\n"
+            return_string += f"size: {self.bytes_to_string(cache.unique_csize)}\n"
             return_string += "\n"
         return return_string.strip()
 
@@ -55,3 +57,13 @@ class Summary(object):
                 if st == detail:
                     break
         return time_string.strip().strip(',')[::-1].replace(' ,', ' dna ', 1)[::-1]
+
+    @staticmethod
+    def bytes_to_string(bytes: int):
+        suffixes = ("B", "KB", "MB", "GB", "TB", "PB")
+        if bytes == 0:
+            return f"0{suffixes[0]}"
+        else:
+            index = int(floor(log(bytes, 1024)))
+            s = round(bytes / pow(1024, index), 2)
+            return "%s %s" % (s, suffixes[index])
