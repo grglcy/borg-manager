@@ -34,9 +34,8 @@ def main(args, path: Path):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-g", "--graph", help="Produce graphs at specified location", type=str)
     parser.add_argument("-s", "--summary", help="Print summary", type=str)
-    parser.add_argument("-o", "--output", help="Output Directory", type=str)
+    parser.add_argument("-d", "--dir", help="Database directory", type=str)
     parser.add_argument("-l", "--label", help="Repo Label", type=str)
     return parser.parse_args()
 
