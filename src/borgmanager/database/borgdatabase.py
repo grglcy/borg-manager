@@ -1,5 +1,5 @@
 from .connection import RepoConn, ArchiveConn, ErrorConn, LabelConn, CacheConn
-from .object import Repo, Archive, Label
+from .object import Repo, Archive, Label, Error
 from .object.label import Label
 from pathlib import Path
 
@@ -50,5 +50,13 @@ class BorgDatabase(object):
     def get_cache(self, repo):
         archive = self.archive_conn.get_latest(repo.primary_key)
         return self.cache_conn.get(archive.primary_key)
+
+    def get_repo_errors(self, repo_id):
+        label = self.label_conn.get_label_id(repo_id)
+        return self.error_conn.get_repo_errors(label)
+
+    def get_recent_repo_errors(self, repo_id, days=7):
+        label = self.label_conn.get_label_id(repo_id)
+        return self.error_conn.get_recent_repo_errors(label, days)
 
     # endregion
