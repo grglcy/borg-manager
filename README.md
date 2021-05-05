@@ -4,9 +4,9 @@ Summarises [borg](https://borgbackup.readthedocs.io/en/stable/#what-is-borgbacku
 ## Features:
 * Parses json output from 'borg create --json'
 * Stores Repo and archive information in sqlite database
+* Print summary of repos
 
 ### Planned:
-* Summary CLI interface
 * Output to Graphs/HTML
 
 ## How to use
