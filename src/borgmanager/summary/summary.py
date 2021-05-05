@@ -27,12 +27,12 @@ class Summary(object):
             return_string += "\n"
         return return_string.strip()
 
-    def get_error_string(self, repo):
-        errors = self.db.get_recent_repo_errors(repo.primary_key, 7)
+    def get_error_string(self, repo, days=7):
+        errors = self.db.get_recent_repo_errors(repo.primary_key, days)
         if len(errors) == 1:
-            return f"1 error in past week"
+            return f"1 error in the past {days} days"
         else:
-            return f"{len(errors)} errors in past week"
+            return f"{len(errors)} errors in the past {days} days"
 
     def get_backup_line(self, repo_id, empty_char='-'):
         units = [['H' if h else empty_char for h in self.get_archive_hours(repo_id, 24)],
