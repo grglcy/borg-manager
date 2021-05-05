@@ -13,7 +13,7 @@ class StatsConn(DatabaseConnection):
 
     def _create_table(self):
         create_statement = f"create table if not exists {self._sql_table}(" \
-                           f"stat_id INTEGER PRIMARY KEY," \
+                           f"id INTEGER PRIMARY KEY," \
                            f"repo_id INTEGER NOT NULL," \
                            f"archive_id INTEGER NOT NULL," \
                            f"file_count INTEGER NOT NULL," \
@@ -21,19 +21,19 @@ class StatsConn(DatabaseConnection):
                            f"compressed_size INTEGER NOT NULL," \
                            f"deduplicated_size INTEGER NOT NULL," \
                            f"FOREIGN KEY (repo_id) REFERENCES" \
-                           f" {self.repo_table} (repo_id)," \
+                           f" {self.repo_table} (id)," \
                            f"FOREIGN KEY (archive_id) REFERENCES" \
-                           f" {self.archive_table} (archive_id));"
+                           f" {self.archive_table} (id));"
         self.sql_execute(create_statement)
 
     # endregion
 
     # region INSERT
 
-    def _exists(self, record):
+    def _exists(self, record, repo_id=None, archive_id=None, label_id=None):
         return None, None
 
-    def _insert(self, record, repo_id=None, archive_id=None) -> int:
+    def _insert(self, record, repo_id=None, archive_id=None, label_id=None) -> int:
         if repo_id is None or archive_id is None:
             raise Exception("Repo and archive ids not supplied")
         with self.sql_lock:

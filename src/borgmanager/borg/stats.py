@@ -1,18 +1,14 @@
-class Stats(object):
+from . import DBObject
+
+
+class Stats(DBObject):
     def __init__(self, file_count: int, original_size: int, compressed_size: int, deduplicated_size: int,
                  primary_key=None):
+        super(Stats, self).__init__(primary_key)
         self.file_count = file_count
         self.original_size = original_size
         self.compressed_size = compressed_size
         self.deduplicated_size = deduplicated_size
-        self.__primary_key = primary_key
-
-    @property
-    def primary_key(self):
-        if self.__primary_key is None:
-            raise ValueError("Primary key is None")
-        else:
-            return self.__primary_key
 
     @classmethod
     def from_json(cls, json: dict):

@@ -21,12 +21,15 @@ def main(args, path: Path):
         summary = Summary(db, args.summary)
     else:
         borg_output = " ".join(stdin.readlines())
-        bo = OutputHandler(borg_output)
-
-        if bo.error:
-            db.insert_error(bo.get_borg_error())
+        if args.label is None:
+            raise Exception("No label supplied")
         else:
-            db.insert_record(*bo.get_borg_info())
+            bo = OutputHandler(borg_output)
+
+            if bo.error:
+                db.insert_error(bo.get_borg_error(), args.label)
+            else:
+                db.insert_record(*bo.get_borg_info(), args.label)
 
 
 def get_args():
@@ -34,10 +37,11 @@ def get_args():
     parser.add_argument("-g", "--graph", help="Produce graphs at specified location", type=str)
     parser.add_argument("-s", "--summary", help="Print summary", type=str)
     parser.add_argument("-o", "--output", help="Output Directory", type=str)
+    parser.add_argument("-l", "--label", help="Repo Label", type=str)
     return parser.parse_args()
 
 
 if __name__ == "__main__":
-    args = get_args()
-    path = Path(realpath(__file__)).parent.parent
-    main(args, path)
+    m_args = get_args()
+    m_path = Path(realpath(__file__)).parent.parent
+    main(m_args, m_path)

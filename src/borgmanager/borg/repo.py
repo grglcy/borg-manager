@@ -1,20 +1,14 @@
+from . import DBObject
 from datetime import datetime
 from pathlib import Path
 
 
-class Repo(object):
+class Repo(DBObject):
     def __init__(self, fingerprint: str, location: Path, last_modified: datetime, primary_key=None):
+        super(Repo, self).__init__(primary_key)
         self.fingerprint = fingerprint
         self.location = location
         self.last_modified = last_modified
-        self.__primary_key = primary_key
-
-    @property
-    def primary_key(self):
-        if self.__primary_key is None:
-            raise ValueError("Primary key is None")
-        else:
-            return self.__primary_key
 
     # region CLASS METHODS
 

@@ -7,6 +7,7 @@ class OutputHandler(object):
     def __init__(self, borg_output: str):
         self.borg_output = borg_output
         self.borg_json = None
+
         self.error = False
         try:
             self.borg_json = json.loads(borg_output)

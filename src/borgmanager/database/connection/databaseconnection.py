@@ -84,23 +84,23 @@ class DatabaseConnection(ABC):
 
     # region MODIFICATION
 
-    def insert(self, record, repo_id=None, archive_id=None):
-        exists, primary_key = self.exists(record)
+    def insert(self, record, repo_id=None, archive_id=None, label_id=None):
+        exists, primary_key = self.exists(record, repo_id, archive_id, label_id)
         if exists:
-            self._update(record, primary_key)
+            self._update(record, primary_key, repo_id, archive_id, label_id)
             return primary_key
         else:
-            return self._insert(record, repo_id, archive_id)
+            return self._insert(record, repo_id, archive_id, label_id)
 
-    def _update(self, record, primary_key):
+    def _update(self, record, primary_key, repo_id=None, archive_id=None, label_id=None):
         pass
 
     @abstractmethod
-    def _insert(self, record, repo_id=None, archive_id=None) -> int:
+    def _insert(self, record, repo_id=None, archive_id=None, label_id=None) -> int:
         raise NotImplementedError
 
-    def exists(self, record) -> (bool, int):
-        query, args = self._exists(record)
+    def exists(self, record, repo_id=None, archive_id=None, label_id=None) -> (bool, int):
+        query, args = self._exists(record, repo_id, archive_id, label_id)
 
         if query is None:
             return False, None
@@ -112,7 +112,7 @@ class DatabaseConnection(ABC):
                 return True, result[0]
 
     @abstractmethod
-    def _exists(self, record) -> (str, tuple):
+    def _exists(self, record, repo_id=None, archive_id=None, label_id=None) -> (str, tuple):
         raise NotImplementedError
 
     # endregion
