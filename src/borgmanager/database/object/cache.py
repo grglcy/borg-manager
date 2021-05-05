@@ -23,5 +23,14 @@ class Cache(DBObject):
         return cls(total_chunks, total_csize, total_size, total_unique_chunks, unique_csize, unique_size)
 
     @classmethod
-    def from_sql(cls, sql: list):
-        pass
+    def from_sql(cls, sql: tuple):
+        primary_key = sql[0]
+        total_chunks = sql[2]
+        total_csize = sql[3]
+        total_size = sql[4]
+        total_unique_chunks = sql[5]
+        unique_csize = sql[6]
+        unique_size = sql[7]
+
+        return cls(total_chunks, total_csize, total_size, total_unique_chunks,
+                   unique_csize, unique_size, primary_key)

@@ -32,4 +32,15 @@ class Archive(DBObject):
 
     @classmethod
     def from_sql(cls, sql: list):
-        pass
+        primary_key = sql[0]
+        fingerprint = sql[1]
+        name = sql[3]
+        start = sql[4]
+        end = sql[5]
+        file_count = sql[6]
+        original_size = sql[7]
+        compressed_size = sql[8]
+        deduplicated_size = sql[9]
+
+        return cls(fingerprint, name, start, end, file_count, original_size,
+                   compressed_size, deduplicated_size, primary_key)
