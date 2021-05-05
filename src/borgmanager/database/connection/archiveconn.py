@@ -2,9 +2,9 @@ from .databaseconnection import DatabaseConnection
 
 
 class ArchiveConn(DatabaseConnection):
-    def __init__(self, db_path, repo_table_name: str,
+    def __init__(self, db_path, repo_table: str,
                  table_name: str = "archive"):
-        self.repo_table_name = repo_table_name
+        self.repo_table = repo_table
         super().__init__(db_path, table_name)
 
     def _create_table(self):
@@ -20,7 +20,7 @@ class ArchiveConn(DatabaseConnection):
                            f"compressed_size INTEGER NOT NULL," \
                            f"deduplicated_size INTEGER NOT NULL," \
                            f"FOREIGN KEY (repo_id) REFERENCES" \
-                           f" {self.repo_table_name} (id));"
+                           f" {self.repo_table} (id));"
         self.sql_execute(create_statement)
 
     def _exists(self, record, repo_id=None, archive_id=None, label_id=None):
