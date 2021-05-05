@@ -35,8 +35,8 @@ class Archive(DBObject):
         primary_key = sql[0]
         fingerprint = sql[1]
         name = sql[3]
-        start = sql[4]
-        end = sql[5]
+        start = datetime.fromisoformat(sql[4])
+        end = datetime.fromisoformat(sql[5])
         file_count = sql[6]
         original_size = sql[7]
         compressed_size = sql[8]
@@ -44,3 +44,10 @@ class Archive(DBObject):
 
         return cls(fingerprint, name, start, end, file_count, original_size,
                    compressed_size, deduplicated_size, primary_key)
+
+    # region GET
+
+    def seconds_since(self) -> float:
+        return (datetime.now() - self.start).total_seconds()
+
+    # endregion
