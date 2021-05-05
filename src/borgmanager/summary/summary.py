@@ -18,10 +18,11 @@ class Summary(object):
             cache = Cache.from_sql(self.db.get_cache(repo))
             repo_name = self.db.get_repo_name(repo)
             if repo_name is not None:
-                return_string += f"Repo: {repo_name}\n"
-            return_string += f"Location: {repo.location}\n"
-            return_string += f"Last backup: {self.seconds_to_string(repo.seconds_since(), 'day', True)} ago\n"
-            return_string += f"Un/Compressed Size: {self.bytes_to_string(cache.unique_size)}" \
+                return_string += f"{repo_name} ({repo.location}):\n"
+            else:
+                return_string += f"{repo.location}:\n"
+            return_string += f"\t> Last backup: {self.seconds_to_string(repo.seconds_since(), 'day', True)} ago\n"
+            return_string += f"\t> Un/Compressed Size: {self.bytes_to_string(cache.unique_size)}" \
                              f"/{self.bytes_to_string(cache.unique_csize)}\n"
             return_string += "\n"
         return return_string.strip()
