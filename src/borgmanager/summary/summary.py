@@ -1,4 +1,4 @@
-from borgmanager.database.object import Repo, Cache
+from borgmanager.database.object import Repo, Archive, Cache
 from math import floor, pow, log
 
 
@@ -15,14 +15,16 @@ class Summary(object):
         return_string = ""
         for line in repo_sql:
             repo = Repo.from_sql(line)
+            latest_archive = Archive.from_sql(self.db.get_latest_archive(repo))
             cache = Cache.from_sql(self.db.get_cache(repo))
             repo_name = self.db.get_repo_name(repo)
             if repo_name is not None:
                 return_string += f"{repo_name} ({repo.location}):\n"
             else:
                 return_string += f"{repo.location}:\n"
-            return_string += f"\t> Last backup: {self.seconds_to_string(repo.seconds_since(), 'day', True)} ago\n"
-            return_string += f"\t> Un/Compressed Size: {self.bytes_to_string(cache.unique_size)}" \
+            return_string += f"\t> Last backup: {self.seconds_to_string(latest_archive.seconds_since(), 'day', True)}" \
+                             f" ago\n"
+            return_string += f"\t> Un/Compressed size: {self.bytes_to_string(cache.unique_size)}" \
                              f"/{self.bytes_to_string(cache.unique_csize)}\n"
             return_string += "\n"
         return return_string.strip()
