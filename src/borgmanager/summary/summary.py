@@ -22,15 +22,23 @@ class Summary(object):
                              f" ago\n"
             return_string += f"\t> Un/Compressed size: {self.bytes_to_string(cache.unique_size)}" \
                              f"/{self.bytes_to_string(cache.unique_csize)}\n"
+            return_string += f"\t> {self.get_error_string(repo)}\n"
             return_string += f"\t> {self.get_backup_line(repo.primary_key)}\n"
             return_string += "\n"
         return return_string.strip()
 
-    def get_backup_line(self, repo_id):
-        units = [['H' if h else '_' for h in self.get_archive_hours(repo_id, 24)],
-                 ['D' if d else '_' for d in self.get_archive_days(repo_id, 7)],
-                 ['W' if w else '_' for w in self.get_archive_units(repo_id, 5, 7)],
-                 ['M' if m else '_' for m in self.get_archive_units(repo_id, 12, 30)]]
+    def get_error_string(self, repo):
+        errors = self.db.get_recent_repo_errors(repo.primary_key, 7)
+        if len(errors) == 1:
+            return f"1 error in past week"
+        else:
+            return f"{len(errors)} errors in past week"
+
+    def get_backup_line(self, repo_id, empty_char='-'):
+        units = [['H' if h else empty_char for h in self.get_archive_hours(repo_id, 24)],
+                 ['D' if d else empty_char for d in self.get_archive_days(repo_id, 7)],
+                 ['W' if w else empty_char for w in self.get_archive_units(repo_id, 5, 7)],
+                 ['M' if m else empty_char for m in self.get_archive_units(repo_id, 12, 30)]]
 
         return f"[{']['.join([''.join(u) for u in units])}]"
 
