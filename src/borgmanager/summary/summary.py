@@ -1,4 +1,4 @@
-from borgmanager.database.object import Repo, Stats
+from borgmanager.database.object import Repo
 
 
 class Summary(object):
@@ -14,10 +14,9 @@ class Summary(object):
         return_string = ""
         for line in repo_sql:
             repo = Repo.from_sql(line)
-            stats = Stats.from_sql(self.db.get_repo_stats(repo))
             return_string += f"repo: {repo.location}\n"
             return_string += f"last backup: {self.seconds_to_string(repo.seconds_since(), 'day', True)} ago\n"
-            return_string += f"file count: {stats.file_count}\n"
+            return_string += f"file count: {repo.file_count}\n"
             return_string += "\n"
         return return_string.strip()
 

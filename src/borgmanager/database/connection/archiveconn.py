@@ -15,6 +15,10 @@ class ArchiveConn(DatabaseConnection):
                            f"name TEXT NOT NULL," \
                            f"start TEXT TIMESTAMP NULL," \
                            f"end TEXT TIMESTAMP NULL," \
+                           f"file_count INTEGER NOT NULL," \
+                           f"original_size INTEGER NOT NULL," \
+                           f"compressed_size INTEGER NOT NULL," \
+                           f"deduplicated_size INTEGER NOT NULL," \
                            f"FOREIGN KEY (repo_id) REFERENCES" \
                            f" {self.repo_table_name} (id));"
         self.sql_execute(create_statement)
@@ -29,10 +33,12 @@ class ArchiveConn(DatabaseConnection):
         with self.sql_lock:
             cursor = self.sql_cursor
             statement = f"INSERT INTO {self._sql_table}"\
-                        f" ('fingerprint', 'repo_id', 'name', 'start', 'end')"\
-                        f" VALUES (?, ?, ?, ?, ?);"
+                        f" ('fingerprint', 'repo_id', 'name', 'start', 'end'," \
+                        f"'file_count', 'original_size', 'compressed_size', 'deduplicated_size')"\
+                        f" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"
             args = (record.fingerprint, repo_id, record.name,
-                    record.start, record.end)
+                    record.start, record.end, record.file_count, record.original_size,
+                    record.compressed_size, record.deduplicated_size)
             cursor.execute(statement, args)
             self.sql_commit()
             return cursor.lastrowid
