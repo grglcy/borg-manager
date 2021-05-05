@@ -51,7 +51,6 @@ class LabelConn(DatabaseConnection):
             self.sql_execute(f"UPDATE {self._sql_table} SET label = ? WHERE id = ?;",
                              (record.label, primary_key))
         else:
-            print("updating record")
             self.sql_execute(f"UPDATE {self._sql_table} SET repo_id = ?, label = ? WHERE id = ?;",
                              (repo_id, record.label, primary_key))
         self.sql_commit()

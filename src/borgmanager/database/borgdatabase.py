@@ -1,5 +1,5 @@
 from .connection import RepoConn, ArchiveConn, StatsConn, ErrorConn, LabelConn
-from borgmanager.borg.label import Label
+from .object.label import Label
 from pathlib import Path
 
 

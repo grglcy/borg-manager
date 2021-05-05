@@ -1,4 +1,4 @@
-from borgmanager.borg import Repo, Stats
+from borgmanager.database.object import Repo, Stats
 
 
 class Summary(object):
