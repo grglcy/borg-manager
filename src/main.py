@@ -14,10 +14,8 @@ def main(args, path: Path):
             output_path.mkdir()
         path = output_path
     db = BorgDatabase(path / 'borg.sqlite')
-
-    if args.graph is not None:
-        pass
-    elif args.summary is not None:
+    
+    if args.summary is not None:
         summary = Summary(db, args.summary)
     else:
         borg_output = " ".join(stdin.readlines())
