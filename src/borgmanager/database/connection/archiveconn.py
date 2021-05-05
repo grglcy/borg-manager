@@ -7,6 +7,8 @@ class ArchiveConn(DatabaseConnection):
         self.repo_table = repo_table
         super().__init__(db_path, table_name)
 
+    # region INIT
+
     def _create_table(self):
         create_statement = f"create table if not exists {self._sql_table}(" \
                            f"id INTEGER PRIMARY KEY," \
@@ -22,6 +24,10 @@ class ArchiveConn(DatabaseConnection):
                            f"FOREIGN KEY (repo_id) REFERENCES" \
                            f" {self.repo_table} (id));"
         self.sql_execute(create_statement)
+
+    # endregion
+
+    # region INSERT
 
     def _exists(self, record, repo_id=None, archive_id=None, label_id=None):
         return f"SELECT id FROM {self._sql_table}" \
@@ -42,3 +48,13 @@ class ArchiveConn(DatabaseConnection):
             cursor.execute(statement, args)
             self.sql_commit()
             return cursor.lastrowid
+
+    # endregion
+
+    # region QUERIES
+
+    def get_latest(self, repo_id: int):
+        return self.sql_execute_one(f"SELECT * FROM {self._sql_table} WHERE repo_id = ?"
+                                    f" ORDER BY id DESC LIMIT 1;", (repo_id,))
+
+    # endregion

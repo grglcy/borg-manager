@@ -6,6 +6,8 @@ class CacheConn(DatabaseConnection):
         self.archive_table = archive_table
         super().__init__(db_path, table_name)
 
+    # region INIT
+
     def _create_table(self):
         create_statement = f"create table if not exists {self._sql_table}(" \
                            f"id INTEGER PRIMARY KEY," \
@@ -19,6 +21,10 @@ class CacheConn(DatabaseConnection):
                            f"FOREIGN KEY (archive_id) REFERENCES" \
                            f" {self.archive_table} (id));"
         self.sql_execute(create_statement)
+
+    # endregion
+
+    # region INSERT
 
     def _exists(self, record, repo_id=None, archive_id=None, label_id=None):
         return None, None
@@ -38,3 +44,13 @@ class CacheConn(DatabaseConnection):
                 cursor.execute(statement, args)
                 self.sql_commit()
                 return cursor.lastrowid
+
+    # endregion
+
+    # region QUERIES
+
+    def get(self, archive_id: int):
+        return self.sql_execute_one(f"SELECT * FROM {self._sql_table} WHERE archive_id = ?"
+                                    f" ORDER BY id DESC LIMIT 1;", (archive_id,))
+
+    # endregion
