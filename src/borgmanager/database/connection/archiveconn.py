@@ -7,7 +7,7 @@ class ArchiveConn(DatabaseConnection):
     def __init__(self, db_path, repo_table: str,
                  table_name: str = "archive"):
         self.repo_table = repo_table
-        super().__init__(db_path, table_name)
+        super().__init__(db_path, Archive, table_name)
 
     # region INIT
 
@@ -56,8 +56,8 @@ class ArchiveConn(DatabaseConnection):
     # region QUERIES
 
     def get_latest(self, repo_id: int):
-        return self.sql_execute_one(f"SELECT * FROM {self._sql_table} WHERE repo_id = ?"
-                                    f" ORDER BY id DESC LIMIT 1;", (repo_id,))
+        return Archive.from_sql(self.sql_execute_one(f"SELECT * FROM {self._sql_table} WHERE repo_id = ?"
+                                                     f" ORDER BY id DESC LIMIT 1;", (repo_id,)))
 
     def archive_on_hour(self, repo_id, date: datetime):
         date_string = str(date.date())

@@ -11,13 +11,12 @@ class Summary(object):
             print(self.print_repo_stats())
 
     def print_repo_stats(self):
-        repo_sql = self.db.get_repos()
+        repos = self.db.repo_conn.get_all()
 
         return_string = ""
-        for line in repo_sql:
-            repo = Repo.from_sql(line)
-            latest_archive = Archive.from_sql(self.db.get_latest_archive(repo))
-            cache = Cache.from_sql(self.db.get_cache(repo))
+        for repo in repos:
+            latest_archive = self.db.archive_conn.get_latest(repo.primary_key)
+            cache = self.db.get_cache(repo)
             repo_name = self.db.get_repo_name(repo)
             if repo_name is not None:
                 return_string += f"{repo_name} ({repo.location}):\n"
@@ -32,11 +31,10 @@ class Summary(object):
         return return_string.strip()
 
     def get_backup_line(self, repo_id):
-        units = []
-        units.append(['H' if h else '_' for h in self.get_archive_hours(repo_id, 24)])
-        units.append(['D' if d else '_' for d in self.get_archive_days(repo_id, 7)])
-        units.append(['W' if w else '_' for w in self.get_archive_units(repo_id, 5, 7)])
-        units.append(['M' if m else '_' for m in self.get_archive_units(repo_id, 12, 30)])
+        units = [['H' if h else '_' for h in self.get_archive_hours(repo_id, 24)],
+                 ['D' if d else '_' for d in self.get_archive_days(repo_id, 7)],
+                 ['W' if w else '_' for w in self.get_archive_units(repo_id, 5, 7)],
+                 ['M' if m else '_' for m in self.get_archive_units(repo_id, 12, 30)]]
 
         return f"[{']['.join([''.join(u) for u in units])}]"
 

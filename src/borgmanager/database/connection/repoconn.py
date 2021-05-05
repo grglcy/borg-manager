@@ -1,9 +1,10 @@
 from .databaseconnection import DatabaseConnection
+from borgmanager.database.object import Repo
 
 
 class RepoConn(DatabaseConnection):
     def __init__(self, db_path, table_name: str = 'repo'):
-        super(RepoConn, self).__init__(db_path, table_name)
+        super(RepoConn, self).__init__(db_path, Repo, table_name)
 
     def _create_table(self):
         create_statement = f"create table if not exists {self._sql_table}(" \

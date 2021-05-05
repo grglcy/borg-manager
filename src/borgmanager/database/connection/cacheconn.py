@@ -1,10 +1,11 @@
 from .databaseconnection import DatabaseConnection
+from borgmanager.database.object import Cache
 
 
 class CacheConn(DatabaseConnection):
     def __init__(self, db_path, archive_table: str, table_name: str = "cache"):
         self.archive_table = archive_table
-        super().__init__(db_path, table_name)
+        super().__init__(db_path, Cache, table_name)
 
     # region INIT
 
@@ -50,7 +51,7 @@ class CacheConn(DatabaseConnection):
     # region QUERIES
 
     def get(self, archive_id: int):
-        return self.sql_execute_one(f"SELECT * FROM {self._sql_table} WHERE archive_id = ?"
-                                    f" ORDER BY id DESC LIMIT 1;", (archive_id,))
+        return Cache.from_sql(self.sql_execute_one(f"SELECT * FROM {self._sql_table} WHERE archive_id = ?"
+                                                   f" ORDER BY id DESC LIMIT 1;", (archive_id,)))
 
     # endregion

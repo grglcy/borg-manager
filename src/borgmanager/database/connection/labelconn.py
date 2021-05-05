@@ -1,4 +1,5 @@
 from .databaseconnection import DatabaseConnection
+from borgmanager.database.object import Label
 
 
 class LabelConn(DatabaseConnection):
@@ -6,7 +7,7 @@ class LabelConn(DatabaseConnection):
                  table_name: str = "label"):
         self.repo_table = repo_table
 
-        super().__init__(db_path, table_name)
+        super().__init__(db_path, Label, table_name)
 
     # region INIT
 

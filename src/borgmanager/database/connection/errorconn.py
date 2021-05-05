@@ -1,11 +1,12 @@
 from .databaseconnection import DatabaseConnection
+from borgmanager.database.object import Error
 from datetime import datetime
 
 
 class ErrorConn(DatabaseConnection):
     def __init__(self, db_path, label_table: str, table_name: str = "errors"):
         self.label_table = label_table
-        super().__init__(db_path, table_name)
+        super().__init__(db_path, Error, table_name)
 
     def _create_table(self):
         create_statement = f"create table if not exists {self._sql_table}(" \

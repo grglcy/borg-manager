@@ -4,7 +4,9 @@ import sqlite3
 
 
 class DatabaseConnection(ABC):
-    def __init__(self, db_path, table_name: str):
+    def __init__(self, db_path, object_class, table_name: str):
+        self.object_class = object_class
+
         self.__sql_lock = Lock()
 
         self.__sql_database = sqlite3.connect(db_path,
@@ -120,7 +122,7 @@ class DatabaseConnection(ABC):
     # region QUERIES
 
     def get_all(self):
-        return self.sql_execute_all(f"SELECT * FROM {self._sql_table};")
+        return [self.object_class.from_sql(row) for row in self.sql_execute_all(f"SELECT * FROM {self._sql_table};")]
 
     # endregion
 
