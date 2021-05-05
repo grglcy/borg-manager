@@ -16,9 +16,10 @@ class Summary(object):
         for line in repo_sql:
             repo = Repo.from_sql(line)
             cache = Cache.from_sql(self.db.get_cache(repo))
-            return_string += f"repo: {repo.location}\n"
-            return_string += f"last backup: {self.seconds_to_string(repo.seconds_since(), 'day', True)} ago\n"
-            return_string += f"size: {self.bytes_to_string(cache.unique_csize)}\n"
+            return_string += f"Repo: {self.db.get_repo_name(repo)}\n"
+            return_string += f"Location: {repo.location}\n"
+            return_string += f"Last backup: {self.seconds_to_string(repo.seconds_since(), 'day', True)} ago\n"
+            return_string += f"Size: {self.bytes_to_string(cache.unique_csize)}\n"
             return_string += "\n"
         return return_string.strip()
 
