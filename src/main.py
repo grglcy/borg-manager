@@ -14,9 +14,10 @@ def main(args, path: Path):
             output_path.mkdir()
         path = output_path
     db = BorgDatabase(path / 'borg.sqlite')
-    
-    if args.summary is not None:
-        summary = Summary(db, args.summary)
+
+    if args.summary:
+        summary = Summary(db)
+        print(summary.repo_stats())
     else:
         borg_output = " ".join(stdin.readlines())
         if args.label is None:
@@ -32,7 +33,7 @@ def main(args, path: Path):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-s", "--summary", help="Print summary", type=str)
+    parser.add_argument("-s", "--summary", help="Print summary", action='store_true')
     parser.add_argument("-d", "--dir", help="Database directory", type=str)
     parser.add_argument("-l", "--label", help="Repo Label", type=str)
     return parser.parse_args()

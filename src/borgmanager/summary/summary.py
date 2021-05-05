@@ -1,16 +1,12 @@
-from borgmanager.database.object import Repo, Archive, Cache
 from math import floor, pow, log
 from datetime import datetime, timedelta
 
 
 class Summary(object):
-    def __init__(self, db, args):
+    def __init__(self, db):
         self.db = db
 
-        if args == "repo":
-            print(self.print_repo_stats())
-
-    def print_repo_stats(self):
+    def repo_stats(self):
         repos = self.db.repo_conn.get_all()
 
         return_string = ""
