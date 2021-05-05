@@ -8,8 +8,8 @@ from borgmanager.summary import Summary
 
 
 def main(args, path: Path):
-    if args.output is not None:
-        output_path = Path(args.output)
+    if args.dir is not None:
+        output_path = Path(args.dir)
         if not output_path.exists():
             output_path.mkdir()
         path = output_path
