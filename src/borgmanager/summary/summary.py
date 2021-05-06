@@ -18,7 +18,7 @@ class Summary(object):
                 return_string += f"{repo_name} ({repo.location}):\n"
             else:
                 return_string += f"{repo.location}:\n"
-            return_string += f"\t> Last backup: {self.seconds_to_string(latest_archive.seconds_since(), 'day', True)}" \
+            return_string += f"\t> Last backup: {self.seconds_to_string(latest_archive.seconds_since(), True)}" \
                              f" ago\n"
             return_string += f"\t> Un/Compressed size: {self.bytes_to_string(cache.unique_size)}" \
                              f"/{self.bytes_to_string(cache.unique_csize)}\n"
@@ -66,21 +66,14 @@ class Summary(object):
         return weeks
 
     @staticmethod
-    def seconds_to_string(seconds: int, detail='hour', short=False):
+    def seconds_to_string(seconds: int, short=False):
         seconds = int(seconds)
-        increments = [('year', 31557600),
-                      ('week', 604800),
-                      ('day', 86400),
-                      ('hour', 3600),
-                      ('minute', 60),
-                      ('second', 1)]
-        if short:
-            increments = [('yr', 31557600),
-                          ('wk', 604800),
-                          ('day', 86400),
-                          ('hr', 3600),
-                          ('min', 60),
-                          ('sec', 1)]
+        increments = [('year',      'yr',   31557600),
+                      ('week',      'wk',   604800),
+                      ('day',       'day',  86400),
+                      ('hour',      'hr',   3600),
+                      ('minute',    'min',  60),
+                      ('second',    'sec',  1)]
 
         if seconds == 0:
             return f"0 {increments[-1][0]}s"
@@ -88,9 +81,11 @@ class Summary(object):
         time_string = ""
 
         remainder = seconds
-        for st, s in increments:
+        for st, sst, s in increments:
             if remainder == 0:
                 break
+            if short:
+                st = sst
             if remainder < s or remainder == 0:
                 continue
             else:
@@ -100,12 +95,9 @@ class Summary(object):
                     time_string += f"{exact} {st}s, "
                 else:
                     time_string += f"{exact} {st}, "
-                if st == detail:
+                if short:
                     break
-        if short:
-            return time_string.split(',')[0]
-        else:
-            return time_string.strip().strip(',')[::-1].replace(' ,', ' dna ', 1)[::-1]
+        return time_string.strip().strip(',')[::-1].replace(' ,', ' dna ', 1)[::-1]
 
     @staticmethod
     def bytes_to_string(bytes: int):
