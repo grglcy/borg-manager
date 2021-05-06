@@ -92,15 +92,14 @@ class Summary(object):
             if remainder < s or remainder == 0:
                 continue
             else:
-                exact = remainder // s
-                remainder = remainder % s
+                exact, remainder = divmod(remainder, s)
                 if exact > 1:
                     time_string += f"{exact} {st}s, "
                 else:
                     time_string += f"{exact} {st}, "
                 if truncate:
                     break
-        return time_string.strip().strip(',')[::-1].replace(' ,', ' dna ', 1)[::-1]
+        return time_string.strip().strip(',')[::-1].replace(' ,', ' dna ', 1)[::-1]  # lmao
 
     @staticmethod
     def bytes_to_string(bytes: int):
