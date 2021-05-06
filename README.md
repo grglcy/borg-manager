@@ -15,7 +15,7 @@ Pipe the output of 'borg create --json' to the script, for example:
 
 > borg create --json /repo/path::name /important/data/ 2>&1 | python3 ./main.py -l [label]
 > 
-> <sup>*(2>&1 redirects errors to borg-manager for logging)</sup>
+> <sup>Note: 2>&1 redirects errors to borg-manager for logging</sup>
 
 ### Arguments:
 * -o / --output -> specify database location
