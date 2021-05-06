@@ -45,22 +45,22 @@ class Summary(object):
     def get_archive_hours(self, repo_id, n=12):
         hours = []
         for hours_ago in range(n):
-            exists = self.db.archive_conn.archive_on_hour(repo_id, datetime.today() - timedelta(hours=hours_ago))
+            exists = self.db.archive_conn.archive_on_hour(repo_id, datetime.utcnow() - timedelta(hours=hours_ago))
             hours.append(exists)
         return hours
 
     def get_archive_days(self, repo_id, n=7):
         days = []
         for days_ago in range(n):
-            exists = self.db.archive_conn.archive_on_date(repo_id, datetime.today() - timedelta(days=days_ago))
+            exists = self.db.archive_conn.archive_on_date(repo_id, datetime.utcnow() - timedelta(days=days_ago))
             days.append(exists)
         return days
 
     def get_archive_units(self, repo_id, n: int, dmult: int):
         weeks = []
         for weeks_ago in range(0, n):
-            last_day = datetime.today() - timedelta(days=weeks_ago * dmult)
-            first_day = datetime.today() - timedelta(days=(weeks_ago * dmult) + dmult - 1)
+            last_day = datetime.utcnow() - timedelta(days=weeks_ago * dmult)
+            first_day = datetime.utcnow() - timedelta(days=(weeks_ago * dmult) + dmult - 1)
             exists = self.db.archive_conn.between_dates(repo_id, first_day, last_day)
             weeks.append(exists)
         return weeks
