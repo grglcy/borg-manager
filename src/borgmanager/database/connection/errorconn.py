@@ -15,7 +15,7 @@ class ErrorConn(DatabaseConnection):
                            f"id INTEGER PRIMARY KEY," \
                            f"label_id INT NOT NULL," \
                            f"error TEXT NOT NULL," \
-                           f"time TIMESTAMP NOT NULL," \
+                           f"time TEXT TIMESTAMP NOT NULL," \
                            f"FOREIGN KEY (label_id) REFERENCES" \
                            f" {self.label_table} (id));"
         self.sql_execute(create_statement)
