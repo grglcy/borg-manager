@@ -30,14 +30,14 @@ class Summary(object):
     def get_error_string(self, repo, days=7):
         errors = self.db.get_recent_repo_errors(repo.primary_key, days)
         if len(errors) == 1:
-            return f"1 error in the past {days} days"
+            return f"1 error since {days} days ago"
         else:
-            return f"{len(errors)} errors in the past {days} days"
+            return f"{len(errors)} errors since {days} days ago"
 
     def get_backup_line(self, repo_id, empty_char='-'):
-        units = [['H' if h else empty_char for h in self.get_archive_hours(repo_id, 24)],
-                 ['D' if d else empty_char for d in self.get_archive_days(repo_id, 7)],
-                 ['W' if w else empty_char for w in self.get_archive_units(repo_id, 5, 7)],
+        units = [['H' if h else empty_char for h in self.get_archive_hours(repo_id, 48)],
+                 ['D' if d else empty_char for d in self.get_archive_days(repo_id, 14)],
+                 ['W' if w else empty_char for w in self.get_archive_units(repo_id, 8, 7)],
                  ['M' if m else empty_char for m in self.get_archive_units(repo_id, 12, 30)]]
 
         return f"[{']['.join([''.join(u) for u in units])}]"
@@ -82,6 +82,9 @@ class Summary(object):
                           ('min', 60),
                           ('sec', 1)]
 
+        if seconds == 0:
+            return f"0 {increments[-1][0]}s"
+
         time_string = ""
 
         remainder = seconds
@@ -99,7 +102,10 @@ class Summary(object):
                     time_string += f"{exact} {st}, "
                 if st == detail:
                     break
-        return time_string.strip().strip(',')[::-1].replace(' ,', ' dna ', 1)[::-1]
+        if short:
+            return time_string.split(',')[0]
+        else:
+            return time_string.strip().strip(',')[::-1].replace(' ,', ' dna ', 1)[::-1]
 
     @staticmethod
     def bytes_to_string(bytes: int):
