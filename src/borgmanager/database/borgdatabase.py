@@ -1,5 +1,4 @@
 from .connection import RepoConn, ArchiveConn, ErrorConn, LabelConn, CacheConn
-from .object import Repo, Archive, Label, Error
 from .object.label import Label
 from pathlib import Path
 

@@ -35,7 +35,7 @@ class ErrorConn(DatabaseConnection):
             statement = f"INSERT INTO {self._sql_table}"\
                         f" ('label_id', 'error', 'time')"\
                         f" VALUES (?, ?, ?);"
-            args = (label_id, record.error, datetime.now())
+            args = (label_id, record.error, datetime.utcnow())
             cursor.execute(statement, args)
             self.sql_commit()
             return cursor.lastrowid

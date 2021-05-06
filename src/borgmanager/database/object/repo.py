@@ -1,5 +1,5 @@
 from . import DBObject
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -16,7 +16,9 @@ class Repo(DBObject):
     def from_json(cls, json: dict):
         uuid = json['id']
         location = Path(json['location'])
-        last_modified = datetime.fromisoformat(json['last_modified'])
+        last_modified = datetime.fromisoformat(json['last_modified'])\
+            .astimezone(tz=timezone.utc)\
+            .replace(tzinfo=None)
         return cls(uuid, location, last_modified)
 
     @classmethod
@@ -28,6 +30,6 @@ class Repo(DBObject):
     # region GET
 
     def seconds_since(self) -> float:
-        return (datetime.now() - self.last_modified).total_seconds()
+        return (datetime.utcnow() - self.last_modified).total_seconds()
 
     # endregion

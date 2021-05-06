@@ -1,5 +1,5 @@
 from . import DBObject
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class Archive(DBObject):
@@ -19,8 +19,8 @@ class Archive(DBObject):
     def from_json(cls, json: dict):
         fingerprint = json['id']
         name = json['name']
-        start = datetime.fromisoformat(json['start'])
-        end = datetime.fromisoformat(json['end'])
+        start = datetime.fromisoformat(json['start']).astimezone(tz=timezone.utc).replace(tzinfo=None)
+        end = datetime.fromisoformat(json['end']).astimezone(tz=timezone.utc).replace(tzinfo=None)
 
         stats_json = json['stats']
         file_count = stats_json['nfiles']
@@ -48,6 +48,6 @@ class Archive(DBObject):
     # region GET
 
     def seconds_since(self) -> float:
-        return (datetime.now() - self.start).total_seconds()
+        return (datetime.utcnow() - self.start).total_seconds()
 
     # endregion

@@ -22,4 +22,4 @@ class OutputHandler(object):
         return repo, archive, cache
 
     def get_borg_error(self):
-        return Error(self.borg_output, datetime.now())
+        return Error(self.borg_output, datetime.utcnow())

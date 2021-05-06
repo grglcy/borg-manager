@@ -1,5 +1,5 @@
 from . import DBObject
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class Error(DBObject):
@@ -11,7 +11,7 @@ class Error(DBObject):
     @classmethod
     def from_json(cls, json: dict):
         error = json['error']
-        time = datetime.fromisoformat(json['time'])
+        time = datetime.fromisoformat(json['time']).astimezone(tz=timezone.utc).replace(tzinfo=None)
         return cls(error, time)
 
     @classmethod
