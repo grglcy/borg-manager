@@ -18,7 +18,7 @@ class Summary(object):
                 return_string += f"{repo_name} ({repo.location}):\n"
             else:
                 return_string += f"{repo.location}:\n"
-            return_string += f"\t> Last backup: {self.seconds_to_string(latest_archive.seconds_since(), True)}" \
+            return_string += f"\t> Last backup: {self.seconds_to_string(latest_archive.seconds_since(), True, True)}" \
                              f" ago\n"
             return_string += f"\t> Un/Compressed size: {self.bytes_to_string(cache.unique_size)}" \
                              f"/{self.bytes_to_string(cache.unique_csize)}\n"
@@ -66,7 +66,7 @@ class Summary(object):
         return weeks
 
     @staticmethod
-    def seconds_to_string(seconds: int, short=False):
+    def seconds_to_string(seconds: int, short=False, truncate=False):
         seconds = int(seconds)
         increments = [('year',      'yr',   31557600),
                       ('week',      'wk',   604800),
@@ -95,7 +95,7 @@ class Summary(object):
                     time_string += f"{exact} {st}s, "
                 else:
                     time_string += f"{exact} {st}, "
-                if short:
+                if truncate:
                     break
         return time_string.strip().strip(',')[::-1].replace(' ,', ' dna ', 1)[::-1]
 
