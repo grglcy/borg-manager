@@ -76,7 +76,10 @@ class Summary(object):
                       ('second',    'sec',  1)]
 
         if seconds == 0:
-            return f"0 {increments[-1][0]}s"
+            if short:
+                return f"0 {increments[-1][1]}s"
+            else:
+                return f"0 {increments[-1][0]}s"
 
         time_string = ""
 
