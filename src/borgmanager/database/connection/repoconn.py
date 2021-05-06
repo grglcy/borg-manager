@@ -11,7 +11,7 @@ class RepoConn(DatabaseConnection):
                            f"id INTEGER PRIMARY KEY," \
                            f"fingerprint TEXT NOT NULL UNIQUE," \
                            f"location TEXT NOT NULL," \
-                           f"last_modified TIMESTAMP NOT NULL)"
+                           f"last_modified TEXT TIMESTAMP NOT NULL)"
         self.sql_execute(create_statement)
 
     def _insert(self, record, repo_id=None, archive_id=None, label_id=None) -> int:
