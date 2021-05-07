@@ -25,6 +25,7 @@ def main(args, path: Path, log: Log):
     else:
         sleep(1)
         log.debug("reading from stdin")
+        print(stdin.readline())
         borg_output = " ".join(stdin.readlines())
         log.debug(f"stdin output: {borg_output}")
         if args.label is None:
