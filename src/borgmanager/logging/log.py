@@ -3,7 +3,7 @@ from . import LEVEL_DEBUG, LEVEL_INFO, LEVEL_WARNING, LEVEL_ERROR, LEVEL_CRITICA
 
 class Log(object):
     def __init__(self, level=LEVEL_WARNING):
-        self.level = LEVEL_WARNING
+        self.level = level
 
     def output(self, level, message):
         if self.level <= level:
