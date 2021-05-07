@@ -6,6 +6,7 @@ import argparse
 from borgmanager.borg import OutputHandler
 from borgmanager.summary import Summary
 from borgmanager.logging import Log, LEVEL_DEBUG
+from time import sleep
 
 
 def main(args, path: Path, log: Log):
@@ -22,6 +23,7 @@ def main(args, path: Path, log: Log):
         summary = Summary(db)
         print(summary.repo_stats())
     else:
+        sleep(1)
         log.debug("reading from stdin")
         borg_output = " ".join(stdin.readlines())
         log.debug(f"stdin output: {borg_output}")
