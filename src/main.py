@@ -25,7 +25,6 @@ def main(args, path: Path, log: Log):
     else:
         sleep(1)
         log.debug("reading from stdin")
-        print(stdin.readline())
         borg_output = " ".join(stdin.readlines())
         log.debug(f"stdin output: {borg_output}")
         if args.label is None:
@@ -51,6 +50,7 @@ def get_args():
 
 
 if __name__ == "__main__":
+    print(stdin.readline())
     m_args = get_args()
     m_path = Path(realpath(__file__)).parent.parent
     m_log = Log(LEVEL_DEBUG)
