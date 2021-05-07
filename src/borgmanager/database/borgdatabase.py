@@ -4,7 +4,8 @@ from pathlib import Path
 
 
 class BorgDatabase(object):
-    def __init__(self, db_path: Path):
+    def __init__(self, db_path: Path, log):
+        self.log = log
         self.repo_name = "repo"
         self.archive_name = "archive"
         self.cache_name = "cache"
@@ -27,16 +28,19 @@ class BorgDatabase(object):
     # region INSERT
 
     def insert_record(self, repo, archive, cache, label):
+        self.log.debug("Inserting record")
         repo_id = self.repo_conn.insert(repo)
         self.insert_label(label, repo_id=repo_id)
         archive_id = self.archive_conn.insert(archive, repo_id=repo_id)
         self.cache_conn.insert(cache, archive_id=archive_id)
 
     def insert_error(self, borg_error, label):
+        self.log.debug("Inserting error")
         label_id = self.insert_label(label)
         self.error_conn.insert(borg_error, label_id=label_id)
 
     def insert_label(self, label, repo_id=None):
+        self.log.debug("Inserting label")
         return self.label_conn.insert(Label(label), repo_id=repo_id)
 
     # endregion
