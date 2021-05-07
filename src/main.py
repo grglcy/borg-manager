@@ -24,6 +24,7 @@ def main(args, path: Path, log: Log):
     else:
         log.debug("reading from stdin")
         borg_output = " ".join(stdin.readlines())
+        log.debug(f"stdin output: {borg_output}")
         if args.label is None:
             log.error("No label supplied")
             raise Exception("No label supplied")
