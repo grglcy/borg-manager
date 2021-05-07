@@ -6,7 +6,6 @@ import argparse
 from borgmanager.borg import OutputHandler
 from borgmanager.summary import Summary
 from borgmanager.logging import Log, LEVEL_DEBUG, LEVEL_WARNING
-from time import sleep
 
 
 def main(args, path: Path, log: Log):
@@ -19,7 +18,7 @@ def main(args, path: Path, log: Log):
     db = BorgDatabase(path / 'borg.sqlite', log)
 
     if args.summary:
-        log.debug("args.summary")
+        log.debug("creating summary")
         summary = Summary(db)
         print(summary.repo_stats())
     else:

@@ -6,6 +6,8 @@ class Error(DBObject):
     def __init__(self, error: str, time: datetime, primary_key=None):
         super(Error, self).__init__(primary_key)
         self.error = error.strip()
+        if not self.error:
+            self.error = "No error information supplied"
         self.time = time
 
     @classmethod
