@@ -5,7 +5,7 @@ from pathlib import Path
 import argparse
 from borgmanager.borg import OutputHandler
 from borgmanager.summary import Summary
-from borgmanager.logging import Log, LEVEL_DEBUG
+from borgmanager.logging import Log, LEVEL_DEBUG, LEVEL_WARNING
 from time import sleep
 
 
@@ -45,11 +45,15 @@ def get_args():
     parser.add_argument("-s", "--summary", help="Print summary", action='store_true')
     parser.add_argument("-d", "--dir", help="Database directory", type=str)
     parser.add_argument("-l", "--label", help="Repo Label", type=str)
+    parser.add_argument("-v", "--verbose", help="Repo Label", action="store_true")
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     m_args = get_args()
     m_path = Path(realpath(__file__)).parent.parent
-    m_log = Log(LEVEL_DEBUG)
+    if m_args.verbose:
+        m_log = Log(LEVEL_DEBUG)
+    else:
+        m_log = Log(LEVEL_WARNING)
     main(m_args, m_path, m_log)
