@@ -23,7 +23,6 @@ def main(args, path: Path, log: Log):
         summary = Summary(db)
         print(summary.repo_stats())
     else:
-        sleep(1)
         log.debug("reading from stdin")
         borg_output = " ".join(stdin.readlines())
         log.debug(f"stdin output: {borg_output}")
@@ -50,7 +49,6 @@ def get_args():
 
 
 if __name__ == "__main__":
-    print(stdin.readline())
     m_args = get_args()
     m_path = Path(realpath(__file__)).parent.parent
     m_log = Log(LEVEL_DEBUG)
