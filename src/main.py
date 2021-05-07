@@ -23,6 +23,7 @@ def main(args, path: Path, log: Log):
         summary = Summary(db)
         print(summary.repo_stats())
     else:
+        sleep(5)
         log.debug("reading from stdin")
         borg_output = " ".join(stdin.readlines())
         log.debug(f"stdin output: {borg_output}")
