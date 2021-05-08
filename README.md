@@ -1,6 +1,9 @@
 # borg manager
 Summarises [borg](https://borgbackup.readthedocs.io/en/stable/#what-is-borgbackup) backups using output from '[borg create](https://borgbackup.readthedocs.io/en/stable/usage/create.html#description)'.
 
+> This project has been superseded by [borg-web](https://github.com/georgelacey/borg-web),
+> a client and web server that provides summaries in the form of a website
+
 ## Features:
 * Parses json output from 'borg create --json'
 * Stores repo and archive information in sqlite database
